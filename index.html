@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Башцап</title>
     <style>
         * {
@@ -10,24 +10,19 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        body {
-            background: #00A651;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        html, body {
+            height: 100%;
+            width: 100%;
             overflow: hidden;
+            background: #fff;
         }
 
         .app {
-            width: 95%;
-            max-width: 1100px;
-            height: 90vh;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            width: 100%;
+            height: 100%;
             display: flex;
             overflow: hidden;
         }
@@ -35,19 +30,22 @@
         /* Левая панель */
         .sidebar {
             width: 320px;
+            min-width: 320px;
             background: #f0f0f0;
-            border-right: 2px solid #ccc;
+            border-right: 1px solid #ccc;
             display: flex;
             flex-direction: column;
+            height: 100%;
         }
 
         .sidebar-header {
             background: #00A651;
             color: white;
-            padding: 15px;
+            padding: 12px 15px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-shrink: 0;
         }
 
         .logo-section {
@@ -57,41 +55,39 @@
         }
 
         .logo-icon {
-            width: 40px;
-            height: 40px;
+            width: 38px;
+            height: 38px;
             background: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .logo-text {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: bold;
         }
 
         .add-contact-btn {
             background: white;
             border: none;
-            width: 35px;
-            height: 35px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.2s;
-        }
-
-        .add-contact-btn:hover {
-            transform: scale(1.1);
+            flex-shrink: 0;
         }
 
         .search-box {
-            padding: 10px;
+            padding: 8px;
             background: white;
             border-bottom: 1px solid #ddd;
+            flex-shrink: 0;
         }
 
         .search-box input {
@@ -106,6 +102,7 @@
         .chat-list {
             flex: 1;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .chat-item {
@@ -115,10 +112,10 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            transition: background 0.2s;
+            background: white;
         }
 
-        .chat-item:hover {
+        .chat-item:active {
             background: #e0e0e0;
         }
 
@@ -162,6 +159,7 @@
         .chat-time {
             font-size: 11px;
             color: #999;
+            flex-shrink: 0;
         }
 
         /* Правая панель */
@@ -170,30 +168,50 @@
             display: flex;
             flex-direction: column;
             background: #e5ddd5;
+            height: 100%;
+            min-width: 0;
         }
 
         .chat-header {
             background: #00A651;
             color: white;
-            padding: 12px 20px;
+            padding: 10px 15px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .back-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 5px;
+            margin-right: 5px;
+        }
+
+        .back-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: white;
         }
 
         .chat-header .avatar {
-            width: 40px;
-            height: 40px;
-            font-size: 16px;
+            width: 38px;
+            height: 38px;
+            font-size: 15px;
         }
 
         .chat-header-info {
             flex: 1;
+            min-width: 0;
         }
 
         .chat-header-name {
             font-weight: 600;
-            font-size: 16px;
+            font-size: 15px;
         }
 
         .chat-header-status {
@@ -203,7 +221,8 @@
 
         .chat-actions {
             display: flex;
-            gap: 15px;
+            gap: 12px;
+            flex-shrink: 0;
         }
 
         .chat-actions svg {
@@ -215,18 +234,20 @@
 
         .messages {
             flex: 1;
-            padding: 20px;
+            padding: 15px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
+            -webkit-overflow-scrolling: touch;
         }
 
         .message {
-            max-width: 65%;
+            max-width: 75%;
             padding: 8px 12px;
             border-radius: 8px;
-            position: relative;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .message.received {
@@ -260,15 +281,17 @@
         .message-time svg {
             width: 12px;
             height: 12px;
+            flex-shrink: 0;
         }
 
         .input-area {
             background: #f0f0f0;
-            padding: 12px 20px;
+            padding: 10px 12px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             border-top: 1px solid #ccc;
+            flex-shrink: 0;
         }
 
         .input-area svg {
@@ -276,34 +299,57 @@
             height: 22px;
             cursor: pointer;
             fill: #666;
-        }
-
-        .input-area svg:hover {
-            fill: #00A651;
+            flex-shrink: 0;
         }
 
         .input-area input {
             flex: 1;
-            padding: 10px 15px;
+            padding: 10px 12px;
             border: 1px solid #ccc;
             border-radius: 20px;
             outline: none;
             font-size: 14px;
+            min-width: 0;
         }
 
         .send-btn {
             background: #00A651;
             border: none;
-            padding: 8px 18px;
+            padding: 8px 14px;
             border-radius: 18px;
             color: white;
             cursor: pointer;
             font-weight: 600;
             font-size: 13px;
+            flex-shrink: 0;
         }
 
-        .send-btn:hover {
-            background: #008f45;
+        .empty-state {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #999;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .empty-state svg {
+            width: 70px;
+            height: 70px;
+            fill: #ccc;
+            margin-bottom: 15px;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #666;
+        }
+
+        .empty-state p {
+            font-size: 13px;
         }
 
         /* Модальное окно */
@@ -318,6 +364,7 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            padding: 20px;
         }
 
         .modal.active {
@@ -326,34 +373,36 @@
 
         .modal-content {
             background: white;
-            padding: 25px;
+            padding: 20px;
             border-radius: 10px;
-            width: 90%;
-            max-width: 400px;
+            width: 100%;
+            max-width: 380px;
         }
 
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .modal-header h2 {
             color: #00A651;
-            font-size: 20px;
+            font-size: 18px;
         }
 
         .close-btn {
             background: none;
             border: none;
-            font-size: 24px;
+            font-size: 26px;
             cursor: pointer;
             color: #999;
+            line-height: 1;
+            padding: 0 5px;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .form-group label {
@@ -380,53 +429,101 @@
             background: #00A651;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 11px 20px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 14px;
             width: 100%;
-        }
-
-        .submit-btn:hover {
-            background: #008f45;
-        }
-
-        .empty-state {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: #999;
-            text-align: center;
-            padding: 40px;
-        }
-
-        .empty-state svg {
-            width: 80px;
-            height: 80px;
-            fill: #ccc;
-            margin-bottom: 20px;
+            margin-top: 5px;
         }
 
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 5px;
         }
 
         ::-webkit-scrollbar-thumb {
             background: #00A651;
             border-radius: 3px;
         }
+
+        /* МОБИЛЬНАЯ ВЕРСИЯ */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                min-width: 100%;
+                border-right: none;
+            }
+
+            .chat-area {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                transform: translateX(100%);
+                transition: transform 0.25s ease;
+                z-index: 10;
+            }
+
+            .app.chat-open .chat-area {
+                transform: translateX(0);
+            }
+
+            .back-btn {
+                display: flex;
+                align-items: center;
+            }
+
+            .chat-actions svg:nth-child(2),
+            .chat-actions svg:nth-child(3) {
+                display: none;
+            }
+
+            .input-area svg:nth-child(1),
+            .input-area svg:nth-child(2),
+            .input-area svg:nth-child(4) {
+                display: none;
+            }
+
+            .send-btn {
+                display: none;
+            }
+
+            .input-area {
+                padding: 8px 10px;
+            }
+
+            .input-area input {
+                padding: 10px 14px;
+            }
+
+            .message {
+                max-width: 85%;
+            }
+
+            .messages {
+                padding: 10px;
+            }
+
+            .logo-text {
+                font-size: 18px;
+            }
+
+            .logo-icon {
+                width: 34px;
+                height: 34px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="app">
+    <div class="app" id="app">
         <!-- Левая панель -->
         <div class="sidebar">
             <div class="sidebar-header">
                 <div class="logo-section">
                     <div class="logo-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="#00A651">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="#00A651">
                             <path d="M12 2C6.48 2 2 6.48 2 12c0 1.82.5 3.53 1.36 5L2 22l5-1.36C8.47 21.5 10.18 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.58 0-3.07-.41-4.36-1.13l-.31-.18-2.96.79.79-2.96-.18-.31C4.41 15.07 4 13.58 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8z"/>
                             <path d="M15.5 14.5c-.28-.14-1.65-.82-1.9-.92-.25-.1-.44-.14-.63.14-.19.28-.73.92-.9 1.11-.17.19-.33.21-.61.07-.28-.14-1.18-.44-2.25-1.39-.83-.74-1.39-1.65-1.55-1.93-.17-.28-.02-.43.13-.57.13-.13.28-.33.42-.5.14-.17.19-.28.28-.47.09-.19.05-.35-.02-.49-.07-.14-.63-1.52-.86-2.08-.23-.55-.46-.47-.63-.48-.16-.01-.35-.01-.54-.01-.19 0-.5.07-.76.35-.26.28-1 .98-1 2.39s1.02 2.77 1.16 2.96c.14.19 2 3.06 4.85 4.29.68.29 1.21.47 1.62.6.68.22 1.3.19 1.79.12.55-.08 1.65-.67 1.88-1.32.23-.65.23-1.2.16-1.32-.07-.12-.25-.19-.53-.33z"/>
                         </svg>
@@ -457,8 +554,13 @@
                 <p>Выберите чат или добавьте новый контакт</p>
             </div>
             
-            <div id="chatContent" style="display: none; flex: 1; flex-direction: column;">
+            <div id="chatContent" style="display: none; flex: 1; flex-direction: column; height: 100%;">
                 <div class="chat-header">
+                    <button class="back-btn" onclick="closeChat()">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                        </svg>
+                    </button>
                     <div class="avatar" id="chatAvatar">А</div>
                     <div class="chat-header-info">
                         <div class="chat-header-name" id="chatName">Имя</div>
@@ -486,7 +588,7 @@
                     <svg viewBox="0 0 24 24">
                         <path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"/>
                     </svg>
-                    <input type="text" id="messageInput" placeholder="Введите сообщение..." onkeypress="if(event.key==='Enter')sendMessage()">
+                    <input type="text" id="messageInput" placeholder="Сообщение..." onkeypress="if(event.key==='Enter')sendMessage()">
                     <svg onclick="sendMessage()" viewBox="0 0 24 24">
                         <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
                     </svg>
@@ -516,7 +618,6 @@
     </div>
 
     <script>
-        // Данные
         let contacts = [
             { id: 1, name: 'Айгуль', phone: '+7 987 654 32 10', messages: [
                 { text: 'Салам! Как дела?', type: 'received', time: '12:25' },
@@ -533,7 +634,6 @@
         let currentChat = null;
         let nextId = 4;
 
-        // Загрузка из localStorage
         function loadData() {
             const saved = localStorage.getItem('bashcap_data');
             if (saved) {
@@ -543,12 +643,10 @@
             }
         }
 
-        // Сохранение
         function saveData() {
             localStorage.setItem('bashcap_data', JSON.stringify({ contacts, nextId }));
         }
 
-        // Рендер списка чатов
         function renderChatList() {
             const list = document.getElementById('chatList');
             list.innerHTML = '';
@@ -573,7 +671,6 @@
             });
         }
 
-        // Открыть чат
         function openChat(id) {
             currentChat = id;
             const contact = contacts.find(c => c.id === id);
@@ -586,11 +683,23 @@
             
             renderMessages();
             renderChatList();
+            
+            document.getElementById('app').classList.add('chat-open');
+            
+            setTimeout(() => {
+                document.getElementById('messageInput').focus();
+            }, 300);
         }
 
-        // Рендер сообщений
+        function closeChat() {
+            document.getElementById('app').classList.remove('chat-open');
+            currentChat = null;
+            renderChatList();
+        }
+
         function renderMessages() {
             const contact = contacts.find(c => c.id === currentChat);
+            if (!contact) return;
             const container = document.getElementById('messages');
             container.innerHTML = '';
             
@@ -610,7 +719,6 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        // Отправить сообщение
         function sendMessage() {
             const input = document.getElementById('messageInput');
             const text = input.value.trim();
@@ -627,7 +735,6 @@
             renderChatList();
             saveData();
             
-            // Автоответ
             setTimeout(() => {
                 const responses = [
                     'Здорово! 😊',
@@ -652,7 +759,6 @@
             }, 1500);
         }
 
-        // Модальное окно
         function openModal() {
             document.getElementById('modal').classList.add('active');
         }
@@ -663,7 +769,6 @@
             document.getElementById('contactPhone').value = '';
         }
 
-        // Добавить контакт
         function addContact() {
             const name = document.getElementById('contactName').value.trim();
             const phone = document.getElementById('contactPhone').value.trim();
@@ -686,16 +791,22 @@
             openChat(nextId - 1);
         }
 
-        // Поиск
         function searchChats() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const items = document.querySelectorAll('.chat-item');
             
             items.forEach((item, index) => {
-                const name = contacts[index].name.toLowerCase();
-                item.style.display = name.includes(query) ? 'flex' : 'none';
+                if (contacts[index]) {
+                    const name = contacts[index].name.toLowerCase();
+                    item.style.display = name.includes(query) ? 'flex' : 'none';
+                }
             });
         }
+
+        // Закрытие модалки по клику вне её
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
 
         // Инициализация
         loadData();
